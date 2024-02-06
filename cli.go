@@ -2,7 +2,6 @@ package cli
 
 import (
 	"cmp"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -26,7 +25,7 @@ func New() *Cli {
 
 func (c *Cli) AddCommand(cmd command) error {
 	if _, ok := c.cmds[cmd.Name()]; ok {
-		return errors.New("command already existed")
+		return ErrCommandExisted(cmd.Name())
 	}
 
 	c.cmds[cmd.Name()] = cmd
@@ -36,12 +35,12 @@ func (c *Cli) AddCommand(cmd command) error {
 func (c *Cli) Run(args []string) error {
 	if len(args) == 0 {
 		c.commandHelp()
-		return errors.New("no command provided")
+		return ErrNoCommand
 	}
 
 	if _, ok := c.cmds[args[0]]; !ok {
 		c.commandHelp()
-		return errors.New("command not found")
+		return ErrUnknownCommand(args[0])
 	}
 
 	return c.cmds[args[0]].Run(args[1:])

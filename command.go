@@ -147,7 +147,7 @@ func (c *Command[T]) flagCheck(flag string, value string) error {
 		}
 	}
 
-	return fmt.Errorf("unknown flag: %s", flag)
+	return ErrUnknownFlag(flag)
 }
 
 func (c *Command[T]) flagSet(rv reflect.Value, value string) error {
